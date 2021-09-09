@@ -1,27 +1,41 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import useStyles from './styles'
 import{ TextField, Typography, Button, Paper} from '@material-ui/core'
 import FileBase from 'react-file-base64'
-import { useDispatch } from 'react-redux'
-import { createPost } from '../../actions/PostActions'
+import { useDispatch, useSelector } from 'react-redux'
+import { createPost, editPost } from '../../actions/PostActions'
 
-const Forms = () => {
+const Forms = ({ postId, setPostId }) => {
     const classes = useStyles();
     const [postData, setPostData] = useState({creator: '', title: '', message: '', tags: '', selectedFile: ''})
 
     const dispatch = useDispatch()
+    const post = useSelector(state => postId ? state.posts.find((post) => post._id === postId) : null)
+
+    useEffect(() => {
+       post && setPostData(post)
+    }, [post])
 
     const handleSubmit = (e) =>{
         e.preventDefault();
+        
+        if(postId) {
 
-        if(postData.creator && postData.title && postData.message && postData.tags && postData.selectedFile){
-            dispatch(createPost(postData))
-        }else {
-            console.log("error in post data")
+            dispatch(editPost(postId, postData));
+            setPostId(null)
+            clear()
         }
+        // if(!postId && (postData.creator && postData.title && postData.message && postData.tags && postData.selectedFile))
+        else{
+
+            dispatch(createPost(postData));
+            setPostId(null)
+            clear()
+        }
+        
     }
     const clear = () =>{
-
+        setPostData({creator: '', title: '', message: '', tags: '', selectedFile: ''});
     }
 
     return (
@@ -31,14 +45,14 @@ const Forms = () => {
              noValidate
              onSubmit={(e) =>handleSubmit(e)}
             >
-                <Typography variant="h6">Creating A Memory</Typography>
+                <Typography variant="h6">{postId ? 'Editing' : 'Creating'} A Memory</Typography>
                 <TextField name="creator" variant="outlined" label="Creator"  fullWidth value={postData.creator} onChange={(e) => setPostData({...postData, creator: e.target.value})}
                 />
                 <TextField name="title" variant="outlined" label="Title"  fullWidth value={postData.title} onChange={(e) => setPostData({...postData, title: e.target.value})}
                 />
                 <TextField name="message" variant="outlined" label="Message"  fullWidth value={postData.message} onChange={(e) => setPostData({...postData, message: e.target.value})}
                 />
-                <TextField name="tags" variant="outlined" label="Tags"  fullWidth value={postData.tags} onChange={(e) => setPostData({...postData, tags: e.target.value})}
+                <TextField name="tags" variant="outlined" label="Tags"  fullWidth value={postData.tags} onChange={(e) => setPostData({...postData, tags: e.target.value.split(',')})}
                 />
                 <div className={classes.fileInput}>
                     <FileBase type="file"
