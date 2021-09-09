@@ -16,6 +16,10 @@ app.use(cors())
 //-------- Server Routes -----
 app.use('/posts', postRoutes)
 
+app.get('/', (req, res) => {
+    res.send("Hello to Memory Projet")
+})
+
 
 
 
