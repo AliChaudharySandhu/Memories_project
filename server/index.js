@@ -26,7 +26,7 @@ app.get('/', (req, res) => {
 //--------- Monogoose Connection transferred to env ------
 
 dotenv.config();
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 5000;
 
 mongoose.connect(process.env.CONNECTION_URL, {useNewUrlParser : true, useUnifiedTopology : true})
     .then(() => app.listen(PORT, () => console.log(`Your server is connected at Port: ${PORT}`)))

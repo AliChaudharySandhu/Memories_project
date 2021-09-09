@@ -8,12 +8,12 @@ export const postReducer = (posts = [], action) =>{
     else if(action.type === CREATE){
         return [...posts, action.payload]
     }
-    else if(action.type === UPDATE || POST_LIKE){
+    else if(action.type === UPDATE || action.type === POST_LIKE){
         return posts.map(post => post._id === action.payload._id ? action.payload : post)
     }
     else if(action.type === DELETE){
          
-        return posts.filter(post => post._id !== action.payload._id)  
+        return posts.filter(post => post._id !== action.payload)  
     }
     else {
         return posts

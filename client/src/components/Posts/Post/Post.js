@@ -15,7 +15,7 @@ const Post = ({ post, setPostId }) => {
 
     useEffect(() =>{
         
-    },[])
+    },[post])
 
     const classes = useStyles();
     const dispatch = useDispatch(); 

@@ -23,4 +23,9 @@ export default makeStyles((theme) => ({
   buttonSubmit: {
     marginBottom: 10,
   },
+  error:{
+    fontSize : '12px!important',
+    maxWidth: '90%',
+    width: '100%'
+  }
 }));

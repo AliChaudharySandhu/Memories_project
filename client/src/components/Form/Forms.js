@@ -7,6 +7,7 @@ import { createPost, editPost } from '../../actions/PostActions'
 
 const Forms = ({ postId, setPostId }) => {
     const classes = useStyles();
+    const [error, setError] = useState(null)
     const [postData, setPostData] = useState({creator: '', title: '', message: '', tags: '', selectedFile: ''})
 
     const dispatch = useDispatch()
@@ -22,16 +23,16 @@ const Forms = ({ postId, setPostId }) => {
         if(postId) {
 
             dispatch(editPost(postId, postData));
-            setPostId(null)
-            clear()
         }
-        // if(!postId && (postData.creator && postData.title && postData.message && postData.tags && postData.selectedFile))
-        else{
+        else if(!postId && (postData.creator && postData.title && postData.message && postData.tags)){
 
             dispatch(createPost(postData));
+        }else if (!postData.creator || !postData.title || !postData.message || !postData.tags){
+            setError('Fields are missing for the memory* ')
+        }
             setPostId(null)
             clear()
-        }
+            setError(null)
         
     }
     const clear = () =>{
@@ -46,14 +47,15 @@ const Forms = ({ postId, setPostId }) => {
              onSubmit={(e) =>handleSubmit(e)}
             >
                 <Typography variant="h6">{postId ? 'Editing' : 'Creating'} A Memory</Typography>
-                <TextField name="creator" variant="outlined" label="Creator"  fullWidth value={postData.creator} onChange={(e) => setPostData({...postData, creator: e.target.value})}
+                <TextField name="creator" required variant="outlined" label="Creator"  fullWidth value={postData.creator} onChange={(e) => setPostData({...postData, creator: e.target.value})}
                 />
-                <TextField name="title" variant="outlined" label="Title"  fullWidth value={postData.title} onChange={(e) => setPostData({...postData, title: e.target.value})}
+                <TextField name="title" required variant="outlined" label="Title"  fullWidth value={postData.title} onChange={(e) => setPostData({...postData, title: e.target.value})}
                 />
-                <TextField name="message" variant="outlined" label="Message"  fullWidth value={postData.message} onChange={(e) => setPostData({...postData, message: e.target.value})}
+                <TextField name="message" required variant="outlined" label="Message"  fullWidth value={postData.message} onChange={(e) => setPostData({...postData, message: e.target.value})}
                 />
-                <TextField name="tags" variant="outlined" label="Tags"  fullWidth value={postData.tags} onChange={(e) => setPostData({...postData, tags: e.target.value.split(',')})}
+                <TextField name="tags" required variant="outlined" label="Tags"  fullWidth value={postData.tags} onChange={(e) => setPostData({...postData, tags: e.target.value.split(',')})}
                 />
+                <Typography className={classes.error} component="div" color="secondary">{error}</Typography>
                 <div className={classes.fileInput}>
                     <FileBase type="file"
                      multiple={false}
