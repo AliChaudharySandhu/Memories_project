@@ -7,7 +7,7 @@ import { createPost, editPost } from '../../actions/PostActions'
 
 const Forms = ({ postId, setPostId }) => {
     const classes = useStyles();
-    const [error, setError] = useState(null)
+    const [error, setError] = useState('')
     const [postData, setPostData] = useState({creator: '', title: '', message: '', tags: '', selectedFile: ''})
 
     const dispatch = useDispatch()
@@ -20,23 +20,29 @@ const Forms = ({ postId, setPostId }) => {
     const handleSubmit = (e) =>{
         e.preventDefault();
         
-        if(postId) {
+        if(postData.creator && postData.title && postData.message && postData.tags){
 
-            dispatch(editPost(postId, postData));
-        }
-        else if(!postId && (postData.creator && postData.title && postData.message && postData.tags)){
+            if(postId) {
 
-            dispatch(createPost(postData));
-        }else if (!postData.creator || !postData.title || !postData.message || !postData.tags){
-            setError('Fields are missing for the memory* ')
-        }
+                dispatch(editPost(postId, postData));
+            }else if(!postId){
+            
+                dispatch(createPost(postData));
+            }
+            
             setPostId(null)
             clear()
-            setError(null)
+            setError('')
+        }else {
+            
+            setError('Fields are missing for the memory* ')
+        }
+        
         
     }
     const clear = () =>{
         setPostData({creator: '', title: '', message: '', tags: '', selectedFile: ''});
+        setError('')
     }
 
     return (
@@ -46,6 +52,7 @@ const Forms = ({ postId, setPostId }) => {
              noValidate
              onSubmit={(e) =>handleSubmit(e)}
             >
+                {console.log(error)}
                 <Typography variant="h6">{postId ? 'Editing' : 'Creating'} A Memory</Typography>
                 <TextField name="creator" required variant="outlined" label="Creator"  fullWidth value={postData.creator} onChange={(e) => setPostData({...postData, creator: e.target.value})}
                 />
@@ -55,7 +62,7 @@ const Forms = ({ postId, setPostId }) => {
                 />
                 <TextField name="tags" required variant="outlined" label="Tags"  fullWidth value={postData.tags} onChange={(e) => setPostData({...postData, tags: e.target.value.split(',')})}
                 />
-                <Typography className={classes.error} component="div" color="secondary">{error}</Typography>
+                <Typography className={classes.error} component="p" color="secondary">{error}</Typography>
                 <div className={classes.fileInput}>
                     <FileBase type="file"
                      multiple={false}
