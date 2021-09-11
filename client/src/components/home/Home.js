@@ -13,6 +13,7 @@ const Home = () => {
     const dispatch = useDispatch();
 
     const [postId, setPostId] = useState(null)
+    const [isPostDelete, setPostDelete] = useState(false)
 
     useEffect(() => {
         dispatch(getPosts())
@@ -25,11 +26,11 @@ const Home = () => {
                 <Container>
                     <Grid container className={classes.mainContainer} justifyContent="space-between" alignItems="stretch" spacing={4}>
                         <Grid item xs={12} sm={12} md={7}>
-                            <Posts setPostId={setPostId} />
+                            <Posts setPostDelete={setPostDelete} setPostId={setPostId} />
                         </Grid>
 
                         <Grid item xs={12} sm={12} md={4}>
-                            <Forms postId={postId} setPostId={setPostId}/>
+                            <Forms isPostDelete={isPostDelete} postId={postId} setPostId={setPostId}/>
                         </Grid>
                     </Grid>
                 </Container>

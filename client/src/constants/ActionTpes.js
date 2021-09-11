@@ -5,3 +5,5 @@ export const FETCH_ALL = 'FETCH_ALL';
 export const POST_LIKE = 'POST_LIKE';
 export const AUTH = 'AUTH';
 export const LOGOUT = 'LOGOUT';
+export const SIGNIN = 'SIGNIN';
+export const SIGNUP = 'SIGNUP'
