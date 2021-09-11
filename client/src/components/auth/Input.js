@@ -4,12 +4,12 @@ import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 
 import React from 'react'
 
-const Input = ({half, name, label, autoFocus, type, handleCuhange, handleShowPaswrd}) => {
+const Input = ({half, name, label, autoFocus, type, handleChange, handleShowPaswrd}) => {
     return (
         <Grid item xs={12} sm={half ? 6 : 12}>
             <TextField 
                 name={name}
-                onChange={handleCuhange}
+                onChange={handleChange}
                 variant="outlined"
                 required
                 fullWidth

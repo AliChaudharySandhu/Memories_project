@@ -2,6 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import postRoutes from './routes/posts.js'
+import userRoutes from './routes/user.js'
 import dotenv from 'dotenv'
 
 // --------- App Initilization ----
@@ -13,12 +14,9 @@ app.use(express.json({limit: "30mb", extended: true}))
 app.use(express.urlencoded({limit: "30mb", extended: true}))
 app.use(cors())
 
-//-------- Server Routes -----
+//-------- Server base Routes -----
 app.use('/posts', postRoutes)
-
-app.get('/', (req, res) => {
-    res.send("Hello to Memory Projet")
-})
+app.use('/user', userRoutes)
 
 
 

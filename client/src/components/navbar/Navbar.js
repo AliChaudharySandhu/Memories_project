@@ -5,6 +5,7 @@ import useStyles from './styles'
 import {Link} from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { useHistory, useLocation } from 'react-router-dom';
+import jwt from 'jsonwebtoken'
 
 const Navbar = () => {
     const classes = useStyles();
@@ -20,7 +21,12 @@ const Navbar = () => {
 
     useEffect(() =>{
         const token = user?.token;
-        //JWT
+        
+        if(token){
+            const decodedToken = jwt.decode(token);
+
+            if(decodedToken.exp * 1000 < new Date().getTime()) logOut()
+        }
 
         setUser(JSON.parse(localStorage.getItem('profile')))
     }, [location])

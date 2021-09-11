@@ -5,13 +5,14 @@ import FileBase from 'react-file-base64'
 import { useDispatch, useSelector } from 'react-redux'
 import { createPost, editPost } from '../../actions/PostActions'
 
-const Forms = ({ postId, setPostId }) => {
+const Forms = ({ postId, setPostId, isPostDelete }) => {
     const classes = useStyles();
     const [error, setError] = useState('')
-    const [postData, setPostData] = useState({creator: '', title: '', message: '', tags: '', selectedFile: ''})
+    const [postData, setPostData] = useState({title: '', message: '', tags: '', selectedFile: ''})
 
     const dispatch = useDispatch()
     const post = useSelector(state => postId ? state.posts.find((post) => post._id === postId) : null)
+    const user = JSON.parse(localStorage.getItem('profile'))
 
     useEffect(() => {
        post && setPostData(post)
@@ -20,14 +21,14 @@ const Forms = ({ postId, setPostId }) => {
     const handleSubmit = (e) =>{
         e.preventDefault();
         
-        if(postData.creator && postData.title && postData.message && postData.tags){
+        if(postData.title && postData.message && postData.tags){
 
             if(postId) {
 
-                dispatch(editPost(postId, postData));
+                dispatch(editPost(postId, {...postData, name: user?.result?.name}));
             }else if(!postId){
             
-                dispatch(createPost(postData));
+                dispatch(createPost({...postData, name: user?.result?.name}));
             }
             
             setPostId(null)
@@ -41,8 +42,20 @@ const Forms = ({ postId, setPostId }) => {
         
     }
     const clear = () =>{
-        setPostData({creator: '', title: '', message: '', tags: '', selectedFile: ''});
+        setPostData({ title: '', message: '', tags: '', selectedFile: ''});
         setError('')
+    }
+
+    // isPostDelete && clear()
+    
+    if(!user?.result){
+        return(
+            <Paper className={classes.paper}>
+                <Typography variant="h6" align="center" >
+                    Please sign in to create your own memories and like other people memories!
+                </Typography>
+            </Paper>
+        )
     }
 
     return (
@@ -54,8 +67,7 @@ const Forms = ({ postId, setPostId }) => {
             >
                 {console.log(error)}
                 <Typography variant="h6">{postId ? 'Editing' : 'Creating'} A Memory</Typography>
-                <TextField name="creator" required variant="outlined" label="Creator"  fullWidth value={postData.creator} onChange={(e) => setPostData({...postData, creator: e.target.value})}
-                />
+                
                 <TextField name="title" required variant="outlined" label="Title"  fullWidth value={postData.title} onChange={(e) => setPostData({...postData, title: e.target.value})}
                 />
                 <TextField name="message" required variant="outlined" label="Message"  fullWidth value={postData.message} onChange={(e) => setPostData({...postData, message: e.target.value})}
@@ -71,7 +83,7 @@ const Forms = ({ postId, setPostId }) => {
 
                 </div>
                 <Button className={classes.buttonSubmit} variant="contained" color="primary" size="large" type="submit" fullWidth>Submit</Button>
-                <Button variant="contained" color="secondary" size="small" fullWidth onClick={clear}>Clear</Button>
+                <Button type="submit" variant="contained" color="secondary" size="small" fullWidth onClick={clear}>Clear</Button>
 
             </form>
         </Paper>
