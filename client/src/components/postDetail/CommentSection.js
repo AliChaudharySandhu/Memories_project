@@ -25,7 +25,7 @@ const CommentSection = ({post}) => {
              <Grid item xs={12}>
                 <Typography variant="h6" gutterBottom color="textPrimary">Comments</Typography>
              </Grid>
-            <Grid item xs={12} sm={4} className={classes.commentsInner}>
+            <Grid item xs={12} lg={4} className={classes.commentsInner}>
                 {comments?.map((c, i) =>{
                     const arr = c.split(':')
                     const name = arr[0];
@@ -39,7 +39,7 @@ const CommentSection = ({post}) => {
             </Grid>
             {user?.result.name && (
 
-                <Grid item xs={12} sm={8}>
+                <Grid item xs={12} lg={8}>
                     <Typography guuterBottom size="small" variant="body1" color="textSecondary">Write a Comment</Typography>
                     <TextField
                         fullWidth

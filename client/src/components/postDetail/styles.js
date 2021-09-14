@@ -48,6 +48,10 @@ export default makeStyles((theme) => ({
   commentsInner: {
     height: '200px',
     overflowY: 'auto',
+    [theme.breakpoints.down('md')]:{
+      overflowY: 'unset',
+      height: 'auto'
+    }
   },
   postDestailContainer:{
     [theme.breakpoints.down('sm')]:{
