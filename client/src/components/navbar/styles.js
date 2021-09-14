@@ -12,8 +12,7 @@ export default makeStyles((theme) => ({
     padding: '10px 50px',
   },
   brandContainer: {
-    display: 'flex!important',
-    alignItems: 'center!important',
+    
   },
   heading: {
     color: 'rgba(0,183,255, 1)',
@@ -23,14 +22,14 @@ export default makeStyles((theme) => ({
     marginLeft: '15px',
   },
   toolbar: {
-    display: 'flex',
-    justifyContent: 'flex-end',
-    width: '400px',
+    padding: 0
   },
   profile: {
+    maxWidth: '300px',
+    minWidth: '300px',
     display: 'flex',
+    alignItems: 'center',
     justifyContent: 'space-between',
-    width: '400px',
   },
   userName: {
     display: 'flex',

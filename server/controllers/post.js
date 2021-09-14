@@ -2,20 +2,49 @@ import PostMessage from '../models/postMessages.js';
 import mongoose  from 'mongoose';
 
 export const getPosts = async (req, res) =>{
+            const {page} = req.query
     try{
-        const postMessages = await PostMessage.find()
+        const LIMIT = 8;
+        const startIndex = (Number(page) - 1) * LIMIT;
+        const total = await PostMessage.countDocuments({}); 
 
-        res.status(200).json(postMessages)
+        const posts = await PostMessage.find().sort({_id : -1}).limit(LIMIT).skip(startIndex)
+
+        res.status(200).json({data: posts, currentPage: Number(page), totalPage: Math.ceil(total/LIMIT)})
+
     } catch (error){
         res.status(400).json({message : error.message})
+    }
+}
+export const getPostDetail = async(req, res) =>{
+    const {id} = req.params
+    // if(!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send('No post with that Id')
+
+    try {
+        const post = await PostMessage.findById(id)
+        res.json(post)
+    } catch (error) {
+        console.log(error)
+    }
+}
+export const getPostsBySearch = async(req, res) =>{
+        const {q , tags} = req.query;
+        const title = new RegExp(q, 'i')
+    try {
+        const posts =await PostMessage.find({$or: [ {title}, {tags: {$in: tags.split(',')}}]})
+        
+        res.json(posts)
+    } catch (error) {
+        console.log(error)
     }
 }
 
 export const createPost = async (req, res) =>{
     const post = req.body;
+    console.log(req.userId)
     
     try{ 
-        const newPost = await new PostMessage({...post, creator: req.userid, createdAt: new Date().toISOString()}).save()
+        const newPost = await new PostMessage({...post, creator: req.userId, createdAt: new Date().toISOString()}).save()
         res.status(201).json(newPost)
 
     }catch (error){
@@ -68,4 +97,19 @@ export const likePost = async(req,res) =>{
         console.log(error.message)
     }
 
+}
+
+export const commentPost = async(req, res) =>{
+    const {id: _id} = req.params
+    const {comment} = req.body
+
+    try{
+        const post = await PostMessage.findById(_id);
+        post.comments.push(comment)
+        const newPost = await PostMessage.findByIdAndUpdate(_id, post, {new : true})
+        res.json(newPost)
+    }
+    catch(error) {
+        console.log(error)
+    }
 }

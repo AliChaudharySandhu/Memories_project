@@ -11,7 +11,7 @@ const Forms = ({ postId, setPostId, isPostDelete }) => {
     const [postData, setPostData] = useState({title: '', message: '', tags: '', selectedFile: ''})
 
     const dispatch = useDispatch()
-    const post = useSelector(state => postId ? state.posts.find((post) => post._id === postId) : null)
+    const post = useSelector(state => postId ? state.posts.posts.find((post) => post._id === postId) : null)
     const user = JSON.parse(localStorage.getItem('profile'))
 
     useEffect(() => {
@@ -59,13 +59,12 @@ const Forms = ({ postId, setPostId, isPostDelete }) => {
     }
 
     return (
-        <Paper className={classes.papers}>
+        <Paper className={classes.papers} elevation={6}>
             <form className={`${classes.root} ${classes.form}`}
              autoComplete="off"
              noValidate
              onSubmit={(e) =>handleSubmit(e)}
             >
-                {console.log(error)}
                 <Typography variant="h6">{postId ? 'Editing' : 'Creating'} A Memory</Typography>
                 
                 <TextField name="title" required variant="outlined" label="Title"  fullWidth value={postData.title} onChange={(e) => setPostData({...postData, title: e.target.value})}
