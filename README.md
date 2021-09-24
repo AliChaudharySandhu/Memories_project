@@ -3,7 +3,7 @@
 **View:**  
      
 <a href="https://memories-project570.web.app/">
-    <img src="./public/images/app_screen.jpg" alt="Shoping Cart" width="800" height="auto">
+    <img src="./client/public/Memories.jpg" alt="Memories" width="800" height="auto">
 </a>
 
 **Features 1**  
